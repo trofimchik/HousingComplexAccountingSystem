@@ -1,0 +1,247 @@
+﻿ <Window x:Class="ComplexPractice.Views.AppartmentListView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ComplexPractice"
+        xmlns:vm="clr-namespace:ComplexPractice.ViewModels"
+        xmlns:hlp="clr-namespace:ComplexPractice.Helpers"
+        mc:Ignorable="d"
+        Title="AppartmentListView" Height="700" Width="1400" Background="DarkOliveGreen">
+    <!--IsEnabled="{Binding Path=ViewEnabled, UpdateSourceTrigger=PropertyChanged}"-->
+    <Window.Resources>
+        <!--<hlp:DistinctConverterDELETE x:Key="distinctConverter" />-->
+        <hlp:EmptyStringConverter x:Key="EmptyStringConverter"/>
+        <!--<MultiBinding x:Key="checkBoxMultiBindingConverter" 
+                              Binding="{Path=MultiBindingConverter}">
+        </MultiBinding>ЭЛД ХАСП-->
+        <hlp:MultiBindingConvertor x:Key="MultiBindingConverter"/>
+    </Window.Resources> 
+    <Window.DataContext>
+        <vm:AppartmentListViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="15*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="4*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="15*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <!--<RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="0.6*"></RowDefinition>
+            <RowDefinition Height="0.6*"></RowDefinition>
+            <RowDefinition Height="0.6*"></RowDefinition>
+            <RowDefinition Height="0.6*"></RowDefinition>
+            <RowDefinition Height="0.6*"></RowDefinition>-->
+        </Grid.RowDefinitions>
+        <!--<TextBox Grid.Row="0" Grid.Column="3" Text="{Binding Path=ComplexAddress}"></TextBox>-->
+        
+
+        <!--<ComboBox x:Name="complexBox" 
+                  ItemsSource="{Binding Path=ComplexNames}" 
+                  SelectedItem="{Binding Path=ComplexName}"
+                  Grid.Column="3" Grid.Row="2"/>
+        <ComboBox x:Name="houseNumberBox" 
+                  ItemsSource="{Binding Path=ComplexAddresses}" 
+                  SelectedItem="{Binding Path=ComplexAddress}"
+                  Grid.Column="3" Grid.Row="4"/>
+        <ComboBox x:Name="floorBox" 
+                  ItemsSource="{Binding Path=Floors}" 
+                  SelectedItem="{Binding Path=Floor}"
+                  Grid.Column="3" Grid.Row="6"/>
+        <ComboBox x:Name="entranceBox" 
+                  ItemsSource="{Binding Path=Entrances}" 
+                  SelectedItem="{Binding Path=Entrance}"
+                  Grid.Column="3" Grid.Row="8"/>
+        <ComboBox x:Name="appartmentConditionBox" 
+                  ItemsSource="{Binding Path=ComplexAddresses}" 
+                  SelectedItem="{Binding Path=ComplexAddress}"
+                  Grid.Column="3" Grid.Row="10"/>-->
+        
+        
+        
+
+        <DataGrid x:Name="DataGridList" 
+                  ItemsSource="{Binding Path=ComplexCollectionView}"
+                  Grid.Column="1"  Grid.RowSpan="6" Grid.Row="1" 
+                  CanUserAddRows="False" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button
+                                Command="{Binding Path=DataContext.ShowAppartmentViewChangeCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                CommandParameter="{Binding}"
+                                >
+                                <!--ЭТО РАБОТАЕТ, НО КАК?-->
+                                Редактировать
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button
+                                Command="{Binding Path=DataContext.SimpleCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                CommandParameter="{Binding}"
+                                >
+                                <!--ЭТО РАБОТАЕТ, НО КАК?-->
+                                Удалить
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Название Комплекса" Binding="{Binding Path=Name}"/>
+                <DataGridTemplateColumn Header="Адрес">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                ул.<Run Text="{Binding Path=Address, Converter={StaticResource EmptyStringConverter}, ConverterParameter='Нет улицы'}"/> 
+                                д.<Run Text="{Binding Path=Building, Converter={StaticResource EmptyStringConverter}, ConverterParameter='Нет номера дома'}"/>
+                                кв.<Run Text="{Binding Path=Appartment, Converter={StaticResource EmptyStringConverter}, ConverterParameter='Нет номера квартиры'}"/>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--<DataGridTextColumn Header="Дом" Binding="{Binding Path=Building}"/>-->
+                <DataGridTextColumn Header="Площадь" Binding="{Binding Path=Space}"/>
+                <DataGridTextColumn Header="Кол-во комнат" Binding="{Binding Path=NumberOfRooms}"/>
+                <DataGridTextColumn Header="Подъезд" Binding="{Binding Path=Entrance}"/>
+                <DataGridTextColumn Header="Этаж" Binding="{Binding Path=Floor}"/>
+                <DataGridTextColumn Header="Статус квартиры" Binding="{Binding Path=AppartmentCondition}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Button Grid.Row="1" Grid.Column="3" Command="{Binding Path=ResetFiltersCommand}">Сброс фильтров</Button>
+
+        <!--#region checkBoxTree очень костыльно, много повторений кода... 
+        может можно написать какой-то конвертер? чтобы в нем было прописано какие данные выводить(isChecked-true,false),
+        и реализовать шаблонный ресурс, чтобы убрать повторения?
+        Думаю стоит сделать блокировку следующих чекбоксов до нажатия верхних.-->
+        <TreeView Grid.Column="3" Grid.Row="2">
+            <TreeViewItem Header='Название ЖК' ItemsSource="{Binding Path=ComplexNames}">
+                <!--ItemsSource="{Binding Path=ComplexList}"-->
+                <TreeViewItem.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox x:Name="checkBoxOfNames" Tag="Name"  
+                                  IsChecked="{Binding Path=DataContext.IsNameChecked, 
+                            RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}" 
+                                  Command="{Binding Path=DataContext.ExecuteApplyFilterCommand, 
+                            RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}">
+                            <CheckBox.CommandParameter>
+                                <MultiBinding Converter="{StaticResource MultiBindingConverter}">
+                                    <Binding Path="IsChecked" ElementName="checkBoxOfNames"/>
+                                    <Binding Path="Text" ElementName="checkBoxNameContent"/>
+                                    <Binding ElementName="checkBoxOfNames" Path="Tag"/>
+                                </MultiBinding>
+                            </CheckBox.CommandParameter>
+                            <TextBlock x:Name="checkBoxNameContent" Text="{Binding}" />
+                            <!--, Converter={StaticResource distinctConverter}-->
+                        </CheckBox>
+                    </DataTemplate>
+                </TreeViewItem.ItemTemplate>
+            </TreeViewItem>
+            <TreeViewItem Header='Адрес' ItemsSource="{Binding Path=ComplexAddresses}">
+                <TreeViewItem.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox x:Name="checkBoxOfAdresses" Tag="Address" 
+                                  IsChecked="{Binding Path=DataContext.IsAddressChecked, 
+                            RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}" 
+                                  Command="{Binding Path=DataContext.ExecuteApplyFilterCommand, 
+                            RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}">
+                            <CheckBox.CommandParameter>
+                                <MultiBinding Converter="{StaticResource MultiBindingConverter}">
+                                    <Binding Path="IsChecked" ElementName="checkBoxOfAdresses"/>
+                                    <Binding Path="Text" ElementName="checkBoxAddressContent"/>
+                                    <Binding ElementName="checkBoxOfAdresses" Path="Tag"/>
+                                </MultiBinding>
+                            </CheckBox.CommandParameter>
+                            <TextBlock x:Name="checkBoxAddressContent" Text="{Binding}" />
+                        </CheckBox>
+                    </DataTemplate>
+                </TreeViewItem.ItemTemplate>
+            </TreeViewItem>
+            <TreeViewItem Header='Этаж' ItemsSource="{Binding Path=Floors}">
+                <TreeViewItem.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox x:Name="checkBoxOfFloors" Tag="Floor" 
+                                  IsChecked="{Binding Path=DataContext.IsFloorChecked, 
+                            RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}" 
+                                  Command="{Binding Path=DataContext.ExecuteApplyFilterCommand, 
+                            RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}">
+                            <CheckBox.CommandParameter>
+                                <MultiBinding Converter="{StaticResource MultiBindingConverter}">
+                                    <Binding Path="IsChecked" ElementName="checkBoxOfFloors"/>
+                                    <Binding Path="Text" ElementName="checkBoxFloorContent"/>
+                                    <Binding ElementName="checkBoxOfFloors" Path="Tag"/>
+                                </MultiBinding>
+                            </CheckBox.CommandParameter>
+                            <TextBlock x:Name="checkBoxFloorContent" Text="{Binding}" />
+                        </CheckBox>
+                    </DataTemplate>
+                </TreeViewItem.ItemTemplate>
+            </TreeViewItem>
+            <TreeViewItem Header='Подъезд' ItemsSource="{Binding Path=Entrances}">
+                <TreeViewItem.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox x:Name="checkBoxOfEntrances" Tag="Entrance" 
+                                  IsChecked="{Binding Path=DataContext.IsEntranceChecked, 
+                            RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}" 
+                                  Command="{Binding Path=DataContext.ExecuteApplyFilterCommand, 
+                            RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}">
+                            <CheckBox.CommandParameter>
+                                <MultiBinding Converter="{StaticResource MultiBindingConverter}">
+                                    <Binding Path="IsChecked" ElementName="checkBoxOfEntrances"/>
+                                    <Binding Path="Text" ElementName="checkBoxEntranceContent"/>
+                                    <Binding ElementName="checkBoxOfEntrances" Path="Tag"/>
+                                </MultiBinding>
+                            </CheckBox.CommandParameter>
+                            <TextBlock x:Name="checkBoxEntranceContent" Text="{Binding}" />
+                        </CheckBox>
+                    </DataTemplate>
+                </TreeViewItem.ItemTemplate>
+            </TreeViewItem>
+            <TreeViewItem Header='Статус квартиры' ItemsSource="{Binding Path=AppartmentStatuses}">
+                <TreeViewItem.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox x:Name="checkBoxOfAppartmentStatuses" Tag="AppartmentStatus" 
+                                  IsChecked="{Binding Path=DataContext.IsStatusChecked, 
+                            RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}" 
+                                  Command="{Binding Path=DataContext.ExecuteApplyFilterCommand, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}">
+                            <CheckBox.CommandParameter>
+                                <MultiBinding Converter="{StaticResource MultiBindingConverter}">
+                                    <Binding Path="IsChecked" ElementName="checkBoxOfAppartmentStatuses"/>
+                                    <Binding Path="Text" ElementName="checkBoxAppartmentStatusContent"/>
+                                    <Binding ElementName="checkBoxOfAppartmentStatuses" Path="Tag"/>
+                                </MultiBinding>
+                            </CheckBox.CommandParameter>
+                            <TextBlock x:Name="checkBoxAppartmentStatusContent" Text="{Binding}" />
+                        </CheckBox>
+                    </DataTemplate>
+                </TreeViewItem.ItemTemplate>
+            </TreeViewItem>
+        </TreeView>
+        <!--#endregion-->
+        
+        
+        
+        <Label Grid.Column="3" Grid.Row="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom">Нечеткий поиск</Label>
+        <TextBox Text="{Binding FuzzySearch, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Grid.Row="4"></TextBox>
+        <Button Command="{Binding Path=ShowAppartmentViewCreateCommand}" Grid.Column="3" Grid.Row="6">Добавить</Button>
+    </Grid>
+
+</Window>
